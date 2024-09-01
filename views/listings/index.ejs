@@ -1,0 +1,142 @@
+<!-- Duplicate No2 For display amoubt after taxes
+    
+** USING RIGHT NOW**
+ 
+-->
+
+<%layout("/layouts/boilerplate")%>
+<body>
+    <style>
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter {
+            text-align: center;
+            margin-right: 2rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+
+        .filter:hover {
+            opacity: 1;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .filter p {
+            font-size: 0.8rem;
+        }
+
+        .tax-toggle {
+            border: 1px solid black;
+            border-radius: 1rem;
+            height: 3.25rem;
+            padding: 1rem;
+            margin-left: 2rem;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+
+    <div id="filters">
+        <!-- Filters code remains the same -->
+        <div class="filter">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </div>
+        <!-- Additional filter code here -->
+        <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-mountain-sun"></i></div>
+            <p>Mountains</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-regular fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-tents"></i></div>
+            <p>Camping</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-tractor"></i></div>
+            <p>Farms</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-tractor"></i></div>
+            <p>Farms</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-umbrella-beach"></i></div>
+            <p>Beach</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-sailboat"></i></div>
+            <p>Boats</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-person-skiing"></i></div>
+            <p>Ski-in/out</p>
+        </div>
+
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        <% for(let listing of allListings) { %>
+            <a href="/listings/<%=listing._id%>" class="listing-link">
+                <div class="card col listing-card">
+                    <img src="<%=listing.image.url%>" class="card-img-top" alt="..." style="height: 20rem;">
+                    <div class="card-img-overlay"><%=listing.description %></div>    
+                    <div class="card-body">
+                        <h5 class="card-title"><b><%=listing.title %></b></h5>
+                        <p class="card-text">
+                            &#8377;<span class="listing-price" data-original-price="<%= listing.price %>"><%= listing.price.toLocaleString("en-IN") %></span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        <% } %>
+    </div>
+</body>
+
+<script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    let taxRate = 18; // GST rate in percentage
+    taxSwitch.addEventListener("click", () => {
+        let priceElements = document.getElementsByClassName("listing-price");
+
+        for (let i = 0; i < priceElements.length; i++) {
+            let priceElement = priceElements[i];
+            let originalPrice = parseFloat(priceElement.getAttribute('data-original-price')); // Get the original price from the data attribute
+
+            if (taxSwitch.checked) {
+                // Update the price to include tax
+                let amountAfterTax = originalPrice + (originalPrice * taxRate / 100);
+                priceElement.innerText = amountAfterTax.toLocaleString("en-IN");
+            } else {
+                // Revert the price to the original amount
+                priceElement.innerText = originalPrice.toLocaleString("en-IN");
+            }
+        }
+    });
+</script>
